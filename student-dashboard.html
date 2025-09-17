@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Smart Education</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i data-feather="book-open" class="h-8 w-8 text-indigo-600"></i>
+                    <span class="ml-2 text-xl font-bold text-gray-800">Student Dashboard</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="welcome-name" class="text-gray-700"></span>
+                    <button onclick="logout()" class="text-gray-600 hover:text-indigo-600">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 bg-white shadow-md">
+            <div class="p-4">
+                <nav class="space-y-2">
+                    <button onclick="showSection('lessons')" class="w-full text-left px-4 py-2 hover:bg-indigo-50 rounded-md">Lessons</button>
+                    <button onclick="showSection('quizzes')" class="w-full text-left px-4 py-2 hover:bg-indigo-50 rounded-md">Quizzes</button>
+                    <button onclick="showSection('progress')" class="w-full text-left px-4 py-2 hover:bg-indigo-50 rounded-md">Progress</button>
+                    <button onclick="showSection('profile')" class="w-full text-left px-4 py-2 hover:bg-indigo-50 rounded-md">Profile</button>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="flex-1 p-8">
+            <section id="lessons-section">
+                <h2 class="text-2xl font-bold mb-4">Lessons</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Mock Lessons -->
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                        <h3 class="font-medium">Math Basics (English)</h3>
+                        <p class="text-sm text-gray-500">Video Lesson</p>
+                        <button onclick="downloadLesson(1)" class="mt-2 bg-indigo-600 text-white px-2 py-1 rounded">Download for Offline</button>
+                    </div>
+                    <!-- Add more lessons -->
+                </div>
+            </section>
+            <section id="quizzes-section" class="hidden">
+                <h2 class="text-2xl font-bold mb-4">Quizzes</h2>
+                <!-- Mock Quiz Form -->
+                <form>
+                    <p class="mb-2">Question 1: What is 2+2?</p>
+                    <input type="radio" name="q1" value="4"> 4<br>
+                    <button type="submit" class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded">Submit Quiz</button>
+                </form>
+            </section>
+            <section id="progress-section" class="hidden">
+                <h2 class="text-2xl font-bold mb-4">Progress</h2>
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <p>Lessons Completed: 5/10</p>
+                    <div class="bg-gray-200 h-4 rounded-full">
+                        <div class="bg-indigo-600 h-4 w-1/2 rounded-full"></div>
+                    </div>
+                </div>
+            </section>
+            <section id="profile-section" class="hidden">
+                <h2 class="text-2xl font-bold mb-4">Profile</h2>
+                <p id="profile-info"></p>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        feather.replace();
+
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        if (!user || user.role !== 'student') {
+            window.location.href = 'index.html';
+        }
+        document.getElementById('welcome-name').textContent = `Welcome, ${user.name}`;
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('main section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(`${section}-section`).classList.remove('hidden');
+        }
+
+        function downloadLesson(id) {
+            // Mock offline download using localStorage
+            localStorage.setItem(`lesson_${id}`, 'Downloaded content');
+            alert('Lesson downloaded for offline access!');
+        }
+
+        // Load profile
+        document.getElementById('profile-info').innerHTML = `Name: ${user.name}<br>Email: ${user.email}<br>Role: Student`;
+    </script>
+</body>
+</html>
